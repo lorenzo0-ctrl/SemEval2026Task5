@@ -1,5 +1,8 @@
+import sys
 import argparse
 import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from transformers import TrainingArguments
 from src.utils import fix_seed, compute_metrics
 from src.data import create_dataset, preprocess_function, AmbiStoryDataCollator
