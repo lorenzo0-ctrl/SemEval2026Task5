@@ -111,3 +111,72 @@ The described architecture and training strategy yielded the following results o
 2.  **QLoRA:** Dettmers, T., Pagnoni, A., Holtzman, A., & Zettlemoyer, L. (2023). QLoRA: Efficient Finetuning of Quantized LLMs. *arXiv preprint arXiv:2305.14314*.
 3.  **LoRA:** Hu, E. J., Shen, Y., Wallis, P., et al. (2021). LoRA: Low-Rank Adaptation of Large Language Models. *International Conference on Learning Representations (ICLR)*.
 4.  **Weighted Least Squares (Loss Rationale):** Strutz, T. (2010). *Data Fitting and Uncertainty: A Practical Introduction to Weighted Least Squares and Beyond*. Vieweg+Teubner.
+
+## Usage & Reproduction
+
+To reproduce our results, follow the steps below. The code is optimized to run on a Linux environment with at least **one GPU (16GB VRAM recommended, e.g., NVIDIA T4 or A10)**.
+
+### 1. Installation
+
+Clone the repository and install the required dependencies:
+
+```bash
+git clone [https://github.com/lorenzo0-ctrl/SemEval2026Task5.git](https://github.com/lorenzo0-ctrl/SemEval2026Task5.git)
+cd SemEval2026Task5
+pip install -r requirements.txt
+```
+
+### 2. Data Preparation
+
+1.  Download the official dataset from the **SemEval 2026 Task 5** competition page. (https://nlu-lab.github.io/semeval.html)
+2.  Create a `data/` directory in the root of the project.
+3.  Place the JSON files inside `data/` and rename them for consistency:
+    * `train.json` (Training set)
+    * `dev.json` (Development/Validation set)
+    * `test.json` (Test set)
+
+Your directory structure should look like this:
+```text
+SemEval2026Task5/
+├── data/
+│   ├── train.json
+│   ├── dev.json
+│   └── test.json
+├── src/
+├── scripts/
+└── ...
+```
+
+### 3. Training
+
+To fine-tune the model using QLoRA with our custom **Distribution-Aware Weighted Loss**, run the training script. This will save the best checkpoint and the tokenizer to the output directory.
+
+```bash
+python scripts/train.py \
+    --data_dir data/ \
+    --output_dir outputs/mistral_qlora \
+    --epochs 8 \
+    --batch_size 1 \
+    --grad_accum 16 \
+    --lr 5e-5 \
+    --seed 42
+```
+
+*Note: The script automatically handles 4-bit quantization and LoRA configuration.*
+
+### 4. Inference & Evaluation
+
+To generate predictions on the test set, run the prediction script. This process includes:
+1.  **Calibration:** Fitting a linear regressor on the Dev set to align model outputs with human distributions.
+2.  **Inference:** Predicting scores for the Test set.
+3.  **Optimization:** Applying metric-aware clipping `[1.99, 4.01]`.
+
+```bash
+python scripts/predict.py \
+    --adapter_path outputs/mistral_qlora \
+    --dev_file data/dev.json \
+    --test_file data/test.json \
+    --output_file outputs/submission.jsonl
+```
+
+The final predictions will be saved in `outputs/submission.jsonl` in the required submission format.
