@@ -45,7 +45,8 @@ def main(args):
         fp16=True,
         report_to="none", 
         load_best_model_at_end=True,
-        metric_for_best_model="eval_loss"
+        metric_for_best_model="eval_loss",
+        remove_unused_columns=False
     )
     
     # 5. Initialize Custom Trainer
