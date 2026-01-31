@@ -180,3 +180,13 @@ python scripts/predict.py \
 ```
 
 The final predictions will be saved in `outputs/submission.jsonl` in the required submission format.
+
+### Quick Start: Google Colab
+
+If you prefer to run the code without setting up a local environment, we provide a dedicated **Google Colab Notebook** that automates the entire pipeline (Setup, Training, and Inference).
+
+You can find the notebook at `notebooks/run_on_colab.ipynb` or open it directly:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YOUR_USERNAME/semeval-task5-mistral/blob/main/notebooks/run_on_colab.ipynb)
+
+*Note: The notebook guides you through mounting Google Drive to load your dataset (`train.json`, `dev.json`, `test.json`) and saving the trained adapter.*
