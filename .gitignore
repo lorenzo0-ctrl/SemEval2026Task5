@@ -1,0 +1,41 @@
+# --- Python & Environment ---
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.env
+
+# --- Jupyter Notebooks ---
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# --- IDE Settings (VS Code, PyCharm) ---
+.vscode/
+.idea/
+
+# --- Model Weights & Checkpoints  ---
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.h5
+outputs/
+models/
+adapter_model/
+checkpoints/
+
+# --- Dataset  ---
+data/*
+!data/.gitkeep
+
+# --- Logging ---
+wandb/
+runs/
+logs/
+*.log
+
+# --- System Files ---
+.DS_Store
+Thumbs.db
